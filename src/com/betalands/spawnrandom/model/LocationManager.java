@@ -2,10 +2,12 @@ package com.betalands.spawnrandom.model;
 
 import com.betalands.spawnrandom.RandomSpawnPlugin;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 public class LocationManager {
 
@@ -16,13 +18,17 @@ public class LocationManager {
     }
 
     public Location getRandomLocation(Player player) {
-        return getRandomLocation(player.getWorld());
+        World world = player.getWorld();
+        Location loc = getRandomLocation(world);
+        while(!isValid(loc)) {
+            loc = getRandomLocation(world);
+        }
+        return loc;
     }
 
     private Location getRandomLocation(World world) {
         int x = ThreadLocalRandom.current().nextInt(-radius, radius);
         int z = ThreadLocalRandom.current().nextInt(-radius, radius);
-        int y = world.getHighestBlockYAt(x, z);
 
         int chunkX = x >> 4; // This just gets the chunk coords at a point using math magic
         int chunkZ = z >> 4;
@@ -31,7 +37,15 @@ public class LocationManager {
             world.loadChunk(chunkX, chunkZ);
         }
 
+        int y = world.getHighestBlockYAt(x, z);
+
         return new Location(world, x, y, z);
 
+    }
+
+
+    private boolean isValid(final Location loc) {
+        Material mat = loc.getBlock().getType();
+        return Stream.of(Material.LAVA, Material.STATIONARY_LAVA, Material.STATIONARY_WATER, Material.WATER, Material.CACTUS).noneMatch(m -> m == mat);
     }
 }
