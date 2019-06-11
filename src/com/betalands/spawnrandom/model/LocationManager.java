@@ -1,6 +1,7 @@
 package com.betalands.spawnrandom.model;
 
 import com.betalands.spawnrandom.RandomSpawnPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,13 +13,14 @@ import java.util.stream.Stream;
 public class LocationManager {
 
     private int radius;
+    private World world;
 
     public LocationManager(RandomSpawnPlugin plugin) {
         radius = plugin.getConfig().getRadius();
+        world = plugin.getServer().getWorld("world");
     }
 
     public Location getRandomLocation(Player player) {
-        World world = player.getWorld();
         Location loc = getRandomLocation(world);
         while(!isValid(loc)) {
             loc = getRandomLocation(world);
