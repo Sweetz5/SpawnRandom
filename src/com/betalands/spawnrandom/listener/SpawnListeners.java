@@ -33,8 +33,13 @@ public class SpawnListeners extends PlayerListener {
     }
 
     public boolean isFirstJoin(Player player) {
+        World world = player.getWorld();
+        World mainWorld = plugin.getLocationManager().getWorld();
+        if(!world.equals(mainWorld)) {
+            return false;
+        }
         final String name = player.getName();
-        final File file = new File(player.getWorld().getName() + "/players/" + name + ".dat");
+        final File file = new File(world.getName() + "/players/" + name + ".dat");
         return !file.exists();
     }
 

@@ -50,4 +50,8 @@ public class LocationManager {
         Material mat = loc.getBlock().getType();
         return Stream.of(Material.LAVA, Material.STATIONARY_LAVA, Material.STATIONARY_WATER, Material.WATER, Material.CACTUS).noneMatch(m -> m == mat);
     }
+
+    public World getWorld() {
+        return world;
+    }
 }
