@@ -34,8 +34,7 @@ public class SpawnListeners extends PlayerListener {
 
     public boolean isFirstJoin(Player player) {
         World world = player.getWorld();
-        World mainWorld = plugin.getLocationManager().getWorld();
-        if(!world.equals(mainWorld)) {
+        if(world.getName().equalsIgnoreCase("world_nether")) {
             return false;
         }
         final String name = player.getName();
